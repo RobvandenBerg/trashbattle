@@ -1,0 +1,105 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="mobile-web-app-capable" content="yes">
+	<title>Profile - Trash Battle</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="js/common.js"></script>
+	<script src="js/account.js"></script>
+	<script src="js/profile.js"></script>
+	<script>
+	var profileUsername = QueryString.username;
+	var profileId = 0;
+	function loadProfile()
+	{
+		console.log('logged in as ' + uname);
+		fetch_profile(profileUsername);
+	}
+	getLoginInfo(loadProfile);
+	</script>
+	<style>
+	body
+	{
+		padding: 0px;
+		margin: 0px;
+	}
+	.error
+	{
+		color: red;
+	}
+	#profileContent
+	{
+		text-align: center;
+	}
+	
+	.box
+	{
+		padding: 10px;
+		margin: 10px;
+		margin-bottom: 0px;
+		border: 1px outset gray;
+	}
+	
+	.infotable
+	{
+		display: inline-block;
+		text-align: left;
+	}
+	
+	.aboutmeWrapper
+	{
+		text-align: left;
+	}
+	
+	.spanlink
+	{
+		color: blue;
+		cursor: pointer;
+		text-decoration: underline;
+	}
+	
+	#editAboutme
+	{
+		width: 100%;
+		height: 100px;
+	}
+	
+	.profile_picture
+	{
+		width: 50px;
+		height: 50px;
+		border: 1px solid black;
+	}
+	
+	#profile_picture_changer
+	{
+		height: 250px;
+	}
+	
+	#profileSwitcher
+	{
+		text-align: center;
+	}
+	
+	.linkWrapper
+	{
+		margin-top: 20px;
+		background-color: #CDCDCD;
+		border: 1px solid black;
+		padding: 5px;
+	}
+	</style>
+</head>
+<body>
+<div class='box' style='text-align: center;'><a href='./index.html'><input type='button' value='Back to Menu'></a></div>
+<div id='profileContent' class='box'>
+Loading profile...
+</div>
+<div class='box' id='profileSwitcher'>
+Go to the profile of:<br>
+<input type='text' maxlength='15' id='goToUser' onkeyup='if (event.keyCode == 13) document.getElementById("goToSubmit").click();'><input id='goToSubmit' type='button' value='Go!' onClick='goToProfile();'>
+</div>
+</body>
+</html>

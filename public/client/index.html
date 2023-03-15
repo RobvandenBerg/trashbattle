@@ -1,0 +1,892 @@
+<!doctype html>
+<html class="no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Trash battle</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="elements/platform/platform.js"></script>
+	<link rel="import" href="elements/elements.html">
+	<script src="js/common.js"></script>
+	<script src="js/account.js"></script>
+	<script src="js/modernizr.js"></script>
+	<script>
+		if (QueryString.msg) {
+			alert(decodeURI(QueryString.msg));
+			window.location = './';
+		}
+	</script>
+	<script>
+		var history = false;
+		if (Modernizr.history) {
+			history = true;
+			history.replaceState({'pageId': 0}, null, window.location);
+		}
+		
+		window.addEventListener("popstate", function(e) {
+			var state = e.state;
+			changePage(state.pageId);
+		});
+	</script>
+	<script>
+		'use strict';
+	  
+		var initGameWidth = 2730;
+		var initGameHeight = 2048;
+		var initSideBarWidth = Math.floor(initGameHeight * 16 / 9 - initGameWidth);;
+		
+		var gameWidth;
+		var gameHeight;
+		var sidebarWidth;
+		
+		var initTotalWidth = initGameWidth + initSideBarWidth;
+		var initTotalHeight = initGameHeight;
+
+		var viewportWidth;
+		var viewportHeight;
+
+		var font = "wf_segoe-ui_normal,'Segoe UI',Segoe,'Segoe WP',Tahoma,Verdana,Arial,sans-serif";
+		
+		var menuc;
+		var menuctx;
+		
+		var menuWidth = 0;
+		var menuHeight = 0;
+		
+		var selectedMenuOption = 1;
+		
+		var totalWidth;
+		var totalHeight;
+	</script>
+
+	<script>
+		var screenactive = 'menu'; // 'menu' or 'overview'
+		var accountPopup;
+		var overview;
+		var creategame;
+
+		var terminateGameAjax = new XMLHttpRequest();
+
+		var loginStatusChange = function() {
+			console.log('Logged in as ' + uname);
+			var createGameContainerContent = '';
+			if (loggedIn) {
+				document.getElementById('account-name').innerHTML = 'Welcome ' + uname;
+				displayLoggedInView();
+				
+				createGameContainerContent += "<div>";
+				createGameContainerContent += "<form>";
+				createGameContainerContent += "<table cellpadding='2' style='display: inline-table; text-align: left;'>";
+				createGameContainerContent += "<tr><td>Game Chat</td><td><select id='CGChat'><option value='1'>On</option><option value='0'>Off</option></select></td></tr>";
+				createGameContainerContent += "<tr><td>Max Players</td><td><select id='CGMaxPlayers'><option value='2'>2</option><option value='3'>3</option><option value='4' SELECTED>4</option></select></td></tr>";
+				createGameContainerContent += "<tr><td>Guest players</td><td><select id='CGGuests'><option value='1'>Allowed</option><option value='0'>Not allowed</option></select></td></tr>";
+				createGameContainerContent += "<tr><td>Coins to win</td><td><select id='CGMaxCoins'><option value='5'>5</option><option value='10'>10</option><option value='15'>15</option></select></td></tr>";
+				createGameContainerContent += "<tr><td>Lives</td><td><select id='CGLives'><option value='1'>1</option><option value='2'>2</option><option value='3' SELECTED>3</option><option value='5'>5</option></select></td></tr>";
+				createGameContainerContent += "<tr><td>Wins</td><td><select id='CGMaxWins'><option value='1'>1</option><option value='2'>2</option><option value='3' SELECTED>3</option><option value='5'>5</option><option value='10'>10</option></select></td></tr>";
+				createGameContainerContent += "<tr><td>Trashcan items</td><td>";
+				createGameContainerContent += "<div class='itemcontainer' id='item_coin' onclick='itemtoggle(\"coin\");'>";
+				createGameContainerContent += "<img class='item_overlay' id='item_coin_overlay' style='display: none;' src='./images/cross.png'><img class='item_image' id='item_coin_display' src='./sprites/coin/normal.png'>";
+				createGameContainerContent += "</div>";
+				createGameContainerContent += "<div class='itemcontainer' id='item_bowlingball' onclick='itemtoggle(\"bowlingball\");'>";
+				createGameContainerContent += "<img class='item_overlay' id='item_bowlingball_overlay' style='display: none;' src='./images/cross.png'><img class='item_image' id='item_bowlingball_display' src='./sprites/bowlingball/normal.png'>";
+				createGameContainerContent += "</div>";
+				createGameContainerContent += "<div class='itemcontainer' id='item_star' onclick='itemtoggle(\"star\");'>";
+				createGameContainerContent += "<img class='item_overlay' id='item_star_overlay' style='display: none;' src='./images/cross.png'><img class='item_image' id='item_star_display' src='./sprites/star/normal.png'>";
+				createGameContainerContent += "</div>";
+				createGameContainerContent += "<div class='itemcontainer' id='item_heart' onclick='itemtoggle(\"heart\");'>";
+				createGameContainerContent += "<img class='item_overlay' id='item_heart_overlay' style='display: none;' src='./images/cross.png'><img class='item_image' id='item_heart_display' src='./sprites/heart/normal.png'>";
+				createGameContainerContent += "</div>";
+				createGameContainerContent += "<div class='itemcontainer' id='item_tnt' onclick='itemtoggle(\"tnt\");'>";
+				createGameContainerContent += "<img class='item_overlay' id='item_tnt_overlay' style='display: none;' src='./images/cross.png'><img class='item_image' id='item_tnt_display' src='./sprites/tnt/normal.png'>";
+				createGameContainerContent += "</div>";
+				createGameContainerContent += "</td></tr>";
+				createGameContainerContent += "<tr><td>Difficulty</td><td><select id='CGDifficulty'><option value='easy'>Easy</option><option value='medium'>Medium</option><option value='hard'>Hard</option></select></td></tr>";
+				createGameContainerContent += "<tr><td>Password needed:</td><td><select id='CGPasswordProtected' onChange='passwordtoggle();'><option value='0'>No</option><option value='1'>Yes</option></select> <div id='passwordshower' style='display: none;'>Password: <input id='CGPassword' maxlength='20' type='password'></div></td></tr>";
+				createGameContainerContent += "<tr><td><input type='reset' value='Reset'></td><td><paper-button raised style='background-color: pink' onclick='createGame();'>Create game</paper-button></td></tr>";
+				createGameContainerContent += "</table>";
+				createGameContainerContent += "</form>";
+				createGameContainerContent += "</div>";
+			} else {
+				displayFormView();
+				document.getElementById('account-name').innerHTML = 'Log In';
+				createGameContainerContent += "You have to be logged in to be able to start a match. <span class='logoutlink' onClick='toggleLoginScreen();'>Log in</span>";
+			}
+			document.getElementById('createGameContainer').innerHTML = createGameContainerContent;
+			
+			if (screenactive == 'overview') {
+				reloadGames();
+			}
+		}
+
+		window.onload = function() {
+			// Load menu settings
+			getLoginInfo(loginStatusChange);
+			
+			menuc = document.getElementById("menu-canvas");
+			menuctx = menuc.getContext("2d");
+			
+			viewportWidth = window.innerWidth;
+			viewportHeight = window.innerHeight - 40;
+			
+			accountPopup = document.getElementById('account-popup');
+			overview = document.getElementById('overview');
+			creategame = document.getElementById('creategame');
+			
+			requestAnimationFrame(menuloop);
+		}
+
+		var selectedMenuOption = 1;
+
+		function handleKey(keyFunction) {
+			if (screenactive == 'menu') {
+				menuHandleKey(keyFunction);
+			}
+		}
+
+
+		function menuHandleKey(keyFunction) {
+			if (keyFunction == 'down' && selectedMenuOption < 3) {
+				selectedMenuOption++;
+			}
+			
+			if (keyFunction == 'up' && selectedMenuOption > 1) {
+				selectedMenuOption--;
+			}
+			
+			if (keyFunction == 'enter') {
+				menuButton(selectedMenuOption);
+			}
+		}
+
+		var lastRefresh = 0;
+
+		function menuloop(timestamp) {
+			if (screenactive == 'overview') {
+				if (new Date().getTime() - 10000 > lastRefresh) {
+					// It's been 10 seconds since the last games reload, let's auto refresh
+					reloadGames();
+				}
+			}
+			if (screenactive != 'menu') {
+				requestAnimationFrame(menuloop);
+				return;
+			}
+			updateScreenSizes();
+			menuc.width = totalWidth;
+			menuc.height = totalHeight;
+			menuctx.fillStyle = "#CDCDCD";
+			menuctx.fillRect(0, 0, totalWidth, totalHeight);
+			
+			
+			var bgcolor = "#FFFFFF";
+			if (selectedMenuOption == 1) {
+				var bgcolor = "orange";
+			}
+			
+			menuctx.fillStyle = bgcolor;
+			menuctx.fillRect(newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 10 * 1), newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 5));
+			
+			menuctx.fillStyle = "#000000";
+			menuctx.strokeRect(newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 10 * 1), newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 5));
+			
+			menuctx.fillStyle = "#000000";
+			menuctx.font= newDimension(200) + "px " + font;
+			menuctx.fillText("Play", newDimension(initTotalWidth / 2 - 200), newDimension(initTotalHeight / 10 * 2 + 50));
+			
+			
+			bgcolor = "#FFFFFF";
+			if (selectedMenuOption == 2) {
+				var bgcolor = "orange";
+			}
+			
+			menuctx.fillStyle = bgcolor;
+			menuctx.fillRect(newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 10 * 4), newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 5));
+			
+			menuctx.fillStyle = "#000000";
+			menuctx.strokeRect(newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 10 * 4), newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 5));
+			
+			menuctx.fillStyle = "#000000";
+			menuctx.font= newDimension(200) + "px " + font;
+			menuctx.fillText("About", newDimension(initTotalWidth / 2 - 250), newDimension(initTotalHeight / 10 * 5 + 50));
+			
+			bgcolor = "#FFFFFF";
+			if (selectedMenuOption == 3) {
+				var bgcolor = "orange";
+			}
+			
+			menuctx.fillStyle = bgcolor;
+			menuctx.fillRect(newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 10 * 7), newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 5));
+			
+			menuctx.fillStyle = "#000000";
+			menuctx.strokeRect(newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 10 * 7), newDimension(initTotalWidth / 3), newDimension(initTotalHeight / 5));
+			
+			menuctx.fillStyle = "#000000";
+			menuctx.font = newDimension(200) + "px " + font;
+			menuctx.fillText("Quit", newDimension(initTotalWidth / 2 - 200), newDimension(initTotalHeight / 10 * 8 + 50));
+			
+			requestAnimationFrame(menuloop);
+		}
+
+		function updateScreenSizes() {
+			viewportWidth = window.innerWidth;
+			viewportHeight = window.innerHeight - 64;
+			if (viewportWidth < initTotalWidth / 11) {
+				viewportWidth = Math.floor(initTotalWidth / 11);
+			}
+			if (viewportHeight < initTotalHeight / 11) {
+				viewportHeight = Math.floor(initTotalHeight / 11);
+			}
+			if ((viewportWidth / initTotalWidth) < (viewportHeight / initTotalHeight)) {
+				// Width shortest
+				sidebarWidth = Math.floor(viewportWidth * initSideBarWidth / initTotalWidth);
+				gameWidth = viewportWidth - sidebarWidth;
+				gameHeight = Math.round(gameWidth * initGameHeight / initGameWidth);
+			} else {
+				// Height shortest
+				gameHeight = viewportHeight;
+				gameWidth = Math.round(gameHeight * initGameWidth / initGameHeight);
+				sidebarWidth = Math.floor(gameWidth * initSideBarWidth / initGameWidth);
+			}
+			totalWidth = gameWidth + sidebarWidth;
+			totalHeight = gameHeight;
+		}
+
+		function switchscreens(oldscreen,newscreen) {
+			screenactive = newscreen;
+			
+			if (oldscreen == 'menu' && newscreen == 'menu') {
+				window.location = "http://trashbattle.com";
+			}
+			/*
+			if (newscreen == 'overview') {
+				document.getElementById('bar-add-button').style.display = 'inline-block';
+				document.getElementById('bar-refresh-button').style.display = 'inline-block';
+			} else if (oldscreen == 'overview') {
+				document.getElementById('bar-add-button').style.display = 'none';
+				document.getElementById('bar-refresh-button').style.display = 'none';
+			}
+			*/
+			
+			//document.getElementById(oldscreen + '-container').style.display = 'none';
+			//document.getElementById(screenactive + '-container').style.display = 'block';
+			switch(newscreen){
+				case 'menu':
+					changePage(0);
+					if (history) {
+						history.pushState({'pageId': 0}, null, '//trashbattle.com/client/');
+					}
+				break;
+				case 'about':
+					changePage(2);
+					if (history) {
+						history.pushState({'pageId': 2}, null, '//trashbattle.com/client/' + 'about');
+					}
+				break;
+				case 'overview':
+					changePage(1);
+					if (history) {
+						history.pushState({'pageId': 1}, null, '//trashbattle.com/client/' + 'overview');
+					}
+				break;
+			}
+			
+			hideAccountPopup();
+		}
+
+		
+		function newDimension(dimension) {
+			return Math.round(dimension * gameWidth / initGameWidth);
+		}
+	</script>
+
+	<script>
+		// Overview scripts
+		var reloadGamesAjax = new XMLHttpRequest();
+		var createGameAjax = new XMLHttpRequest();  
+		var joinGameAjax = new XMLHttpRequest();  
+
+		var busyReloadingGames = false;
+
+		function openOverview() {
+			lookAtCurrentGames();
+			reloadGames();
+			switchscreens(screenactive,'overview');
+		}
+
+		function reloadGames() {
+			if (busyReloadingGames) {
+				return;
+			}
+			busyReloadingGames = true;
+			
+			lastRefresh = new Date().getTime();
+			
+			document.getElementById('currentmatches').innerHTML = '<img src="images/ui/ajax-loader.gif">';
+			reloadGamesAjax.onreadystatechange = function() {
+				if (reloadGamesAjax.readyState == 4) {
+					busyReloadingGames = false;
+					if (reloadGamesAjax.status == 200) {
+						var resp = reloadGamesAjax.responseText;
+						var response = JSON.parse(resp);
+						document.getElementById('currentmatches').innerHTML = '';
+						document.getElementById('totalActiveMatches').innerHTML = ' (' + response.length + ')';
+						if (response.length == 0) {
+							document.getElementById('currentmatches').innerHTML = 'There are no matches (yet). Create one by clicking on the "Start new match" tab.';
+						}
+						for (var i in response) {
+							var game = response[i];
+							var adder = '<div>' + game.host_username +  ' (' + game.players + '/' + game.max_players + ' players)' + ' <a href="game.html?id='+ game.id +'"><input type="button" value="Join game"></a>';
+							if (m) {
+							adder += '<input type="button" value="Terminate" onClick="terminateGame(' + game.id + ');">';
+							}
+							adder += '</div>';
+							document.getElementById('currentmatches').innerHTML += adder;
+						}
+					}
+				}
+			}
+			reloadGamesAjax.open("GET","http://trashbattle.com/ajax/getgames.php?t=" + Math.random(), true);
+			reloadGamesAjax.send();
+		}
+
+
+		function startCreatingGame() {
+			document.getElementById('currentGamesContainer').style.display = 'none';
+			document.getElementById('createGameContainer').style.display = 'block';
+			
+			document.getElementById('createGameViewButton').className = 'buttonSelected';
+			document.getElementById('currentGamesViewButton').className = 'buttonNormal';
+		}
+
+		function lookAtCurrentGames() {
+			reloadGames();
+			document.getElementById('currentGamesContainer').style.display = 'block';
+			document.getElementById('createGameContainer').style.display = 'none';
+			
+			document.getElementById('createGameViewButton').className = 'buttonNormal';
+			document.getElementById('currentGamesViewButton').className = 'buttonSelected';
+		}
+
+
+		function selectedValue(id) {
+			var e = document.getElementById(id);
+			var value = e.options[e.selectedIndex].value;
+			return value;
+		}
+
+		var CGItems = {coin: 1, bowlingball: 1, star: 1, heart: 1, tnt: 1};
+
+		function itemtoggle(itemType) {
+			if (CGItems[itemType]) {
+				CGItems[itemType] = 0;
+				document.getElementById('item_' + itemType + '_overlay').style.display = 'block';
+			} else {
+				CGItems[itemType] = 1;
+				document.getElementById('item_' + itemType + '_overlay').style.display = 'none';
+			}
+		}
+
+		function passwordtoggle() {
+			if (getSelectValue('CGPasswordProtected') == 1) {
+				document.getElementById('passwordshower').style.display = 'inline-block';
+			} else {
+				document.getElementById('passwordshower').style.display = 'none';
+			}
+		}
+
+		function getSelectValue(selectId) {
+			var e = document.getElementById(selectId);
+			var value = e.options[e.selectedIndex].value;
+			return value;
+		}
+
+		var busyCreatingGame = false;
+		function createGame() {
+			if (busyCreatingGame) {
+				return;
+			}
+			busyCreatingGame = true;
+			
+			var gamedata = {};
+			
+			gamedata['chat'] = parseInt(selectedValue('CGChat'));
+			gamedata['maxplayers'] = parseInt(selectedValue('CGMaxPlayers'));
+			gamedata['guests'] = parseInt(selectedValue('CGGuests'));
+			gamedata['maxcoins'] = parseInt(selectedValue('CGMaxCoins'));
+			gamedata['lives'] = parseInt(selectedValue('CGLives'));
+			gamedata['maxwins'] = parseInt(selectedValue('CGMaxWins'));
+			gamedata['items'] = CGItems;
+			gamedata['difficulty'] = selectedValue('CGDifficulty');
+			if (parseInt(selectedValue('CGPasswordProtected')) == 1) {
+				gamedata['password'] = document.getElementById('CGPassword').value;
+			}
+			
+			createGameAjax.onreadystatechange = function() {
+				if (createGameAjax.readyState == 4) {
+					busyCreatingGame = false;
+					if (createGameAjax.status == 200) {
+						var resp = createGameAjax.responseText;
+						var response = JSON.parse(resp);
+						if (response.success) {
+							window.location = 'game.html?id='+response.id;
+						} else {
+							if (response.errormsg) {
+								alert(response.errormsg);
+							} else {
+								alert('An error occured, please try again');
+							}
+						}
+					}
+				}
+			}
+			createGameAjax.open("POST","http://trashbattle.com/ajax/creategame.php?t=" + Math.random(), true);
+			createGameAjax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			createGameAjax.send("gamedata=" + JSON.stringify(gamedata));
+		}
+
+		function terminateGame(gameid) {
+			terminateGameAjax.onreadystatechange=function() {
+				if (terminateGameAjax.readyState == 4) {
+					if (terminateGameAjax.status == 200) {
+						var resp = terminateGameAjax.responseText;
+						alert(resp);
+						reloadGames();
+					}
+				}
+			}
+			terminateGameAjax.open("POST","http://trashbattle.com/ajax/terminategame.php?id=" + gameid + "t=" + Math.random(), true);
+			terminateGameAjax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			terminateGameAjax.send("id=" + gameid);
+		}
+	</script>
+
+	<script>
+		document.onkeydown = KeyDownCheck;     
+		document.onkeyup = KeyUpCheck;
+
+		var keys = [];
+
+		function KeyDownCheck() {
+			if(window.event) {
+				var KeyID =event.keyCode;
+			} else {
+				//FF uses this
+				var KeyID = winEvent.which;
+			}
+			
+			switch (KeyID) {
+				case 13:
+					keys['enter'] = true;
+					handleKey('enter');
+					break;
+				case 37:
+				case 65:
+					keys['left'] = true;
+					handleKey('left');
+					break;
+				case 38:
+				case 87:
+					keys['up'] = true;
+					handleKey('up');
+					break;
+				case 39:
+				case 68:
+					keys['right'] = true;
+					handleKey('right');
+					break;
+				case 40:
+				case 83:
+					keys['down'] = true;
+					handleKey('down');
+					break;
+			}
+		}
+
+		function KeyUpCheck() {
+			if (window.event) {
+				var KeyID =event.keyCode;
+			} else {
+				//FF uses this
+				var KeyID = winEvent.which;
+			} 
+			
+			switch (KeyID) {
+				case 13:
+					keys['enter'] = false;
+					break;
+				case 37:
+				case 65:
+					keys['left'] = false;
+					break;
+				case 38:
+				case 87:
+					keys['up'] = false;
+					break;
+				case 39:
+				case 68:
+					keys['right'] = false;
+					break;
+				case 40:
+				case 83:
+					keys['down'] = false;
+					break;
+			}
+		}
+
+
+		function menuButton(Number) {
+			if (Number == 1) {
+				openOverview();
+			}
+			if (Number == 2) {
+				switchscreens(screenactive,'about');
+			}
+			if (Number == 3) {
+				window.top.location='http://robdeprop.com';
+			}
+		}
+
+		function mouseHover(e) {
+			x = e.clientX;
+			y = e.clientY;
+			if (screenactive == 'menu') {
+				var rect = menuc.getBoundingClientRect();
+				
+				x = Math.round(x - rect.left);
+				y = Math.round(y - rect.top);
+				
+				var setPointer = false;
+				if (inBox(x, y, newDimension(initTotalWidth/3), newDimension(initTotalHeight/10*1), newDimension(initTotalWidth/3), newDimension(initTotalHeight/5))) {
+					selectedMenuOption = 1;
+					setPointer = true;
+				}
+				if (inBox(x, y, newDimension(initTotalWidth/3), newDimension(initTotalHeight/10*4), newDimension(initTotalWidth/3), newDimension(initTotalHeight/5))) {
+					selectedMenuOption = 2;
+					setPointer = true;
+				}
+				
+				if (inBox(x, y, newDimension(initTotalWidth/3), newDimension(initTotalHeight/10*7), newDimension(initTotalWidth/3), newDimension(initTotalHeight/5))) {
+					selectedMenuOption = 3;
+					setPointer = true;
+				}
+				
+				if (setPointer) {
+					menuc.style.cursor = 'pointer';
+				} else {
+					menuc.style.cursor = 'auto';
+				}
+			} else {
+				if (document.body.style.cursor != 'auto') {
+					menuc.style.cursor = 'auto';
+				}
+			}
+		}
+
+		function mouseClick(e) {
+			x = e.clientX;
+			y = e.clientY;
+			if (screenactive == 'menu') {
+				var rect = menuc.getBoundingClientRect();
+				
+				x = Math.round(x - rect.left);
+				y = Math.round(y - rect.top);
+				
+				if (inBox(x, y, newDimension(initTotalWidth/3), newDimension(initTotalHeight/10*1), newDimension(initTotalWidth/3), newDimension(initTotalHeight/5))) {
+					menuButton(1);
+				}
+				if (inBox(x, y, newDimension(initTotalWidth/3), newDimension(initTotalHeight/10*4), newDimension(initTotalWidth/3), newDimension(initTotalHeight/5))) {
+					menuButton(2);
+				}
+				if (inBox(x, y, newDimension(initTotalWidth/3), newDimension(initTotalHeight/10*7), newDimension(initTotalWidth/3), newDimension(initTotalHeight/5))) {
+					menuButton(3);
+				}
+			}
+		}
+
+		function inBox(x, y, x1, y1, width, height) {
+			if (x >= x1 && x <= x1 + width && y >= y1 && y <= y1 + height) {
+				return true;
+			}
+			return false;
+		}
+		
+
+		function logIn() {
+			var username = document.getElementById('username');
+			var password = document.getElementById('password');
+			
+			document.getElementById('loginFormView').style.display = "none";
+			document.getElementById('loggedInView').style.display = "none";
+			document.getElementById('loaderView').style.display = "block";
+			
+			var data = {'username': username.value, 'password': password.value};
+			account.logIn(data, loginDone, displayError);
+		}
+
+		function logOut() {
+			document.getElementById('loginFormView').style.display = "none";
+			document.getElementById('loggedInView').style.display = "none";
+			document.getElementById('loaderView').style.display = "block";
+			account.logOut(logoutDone);
+		}
+
+		function loginDone(data) {
+			uname = data.username;
+			loggedIn = data.loggedIn;
+			m = data.m;
+			document.getElementById('account-popup').style.display = 'none';
+			document.getElementById('account-name').innerHTML = 'Welcome ' + uname;
+			document.getElementById('username').value = "";
+			document.getElementById('password').value = "";
+			loginStatusChange();
+		}
+
+		function logoutDone() {
+			loggedIn = false;
+			uname = '';
+			document.getElementById('account-popup').style.display = 'none';
+			document.getElementById('account-name').innerHTML = 'Log In';
+			loginStatusChange();
+		}
+
+		function displayLoggedInView() {
+			document.getElementById('loginFormView').style.display = "none";
+			document.getElementById('loggedInView').style.display = "block";
+			document.getElementById('loaderView').style.display = "none";
+			document.getElementById('coins-amount').innerHTML = coins;
+		}
+		
+		function displayFormView() {
+			document.getElementById('loginErrorView').innerHTML = "";
+			document.getElementById('loginFormView').style.display = "block";
+			document.getElementById('loggedInView').style.display = "none";
+			document.getElementById('loaderView').style.display = "none";
+		}
+
+		function displayError(msg) {
+			displayFormView();
+			document.getElementById('loginErrorView').innerHTML = "<div class='callout callout-danger'>" + msg + "</div>";
+		}
+
+		function submitOnEnter(event) {
+			if (event.keyCode == 13) {
+				logIn();
+			}
+		}
+		
+		function toggleAccountPopup(event) {
+			event.stopPropagation();
+			if (accountPopup.style.display == 'block') {
+				accountPopup.style.display = 'none';
+			} else {
+				accountPopup.style.display = 'block';
+			}
+		}
+		
+		function hideAccountPopup() {
+			accountPopup.style.display = 'none';
+		}
+		
+		function switchoverview() {
+			event.stopPropagation();
+			if (overview.style.display == 'block') {
+				overview.style.display = 'none';
+				creategame.style.display = 'block';
+				startCreatingGame();
+			} else {
+				overview.style.display = 'block';
+				creategame.style.display = 'none';
+				lookAtCurrentGames();
+			}
+		}
+		
+		function visitProfile()
+		{
+			window.location = './profile.html?username='+uname;
+		}
+	</script>
+</head>
+<body fullbleed layout vertical unresolved>
+	
+	<!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+	
+	<core-header-panel mode="standard" flex>
+	
+		<core-toolbar>
+			<core-icon-button icon="arrow-back" onclick="switchscreens(screenactive, 'menu');"></core-icon-button>
+			<div flex>Trash Battle</div>
+			<div id="bar-rightside">
+				<div id="account" class="bar-item">
+					<div onclick="toggleAccountPopup(event);">
+						<span id="account-name"></span>
+					</div>
+					<div id="account-popup" style="display: none;">
+						<!-- loaderView start -->
+						<div id="loaderView" style="display: block;">
+							<img id="popup-loader" src="images/ui/ajax-loader.gif">
+						</div>
+						<!-- loaderView end -->
+					
+						<!-- loginFormView start -->
+						<div id="loginFormView" style="display: none;">
+							<div id="loginErrorView">
+							</div>
+							<form onkeypress="submitOnEnter(event)">
+								<table>
+									<tr><td><input id="username" class="input" type="text" name="username" maxlength="20" placeholder="Username"></td></tr>
+									<tr><td><input id="password" class="input" type="password" name="password" maxlength="50" placeholder="Password"></td></tr>
+									<tr><td><input id="login" class="button-link" type="button" value="Log in" name="login" onclick="logIn()"> | <a href="./register.html">Register</a></td></tr>
+								</table>
+							</form>
+						</div>
+						<!-- loginFormView end -->
+					
+						<!-- loggedInView start -->
+						<div id="loggedInView" style="display: none;">
+							<ul class="group">
+								<li id="loggedInView-leftside">
+									<div id="coins-container" onclick='switchscreens(screenactive,"shop");'>
+										<img src="sprites/coin/normal.png" alt="coin"/>
+										<span id="coins-amount" class="label label-coins">0</span>
+									</div>
+								</li>
+								<li id="loggedInView-rightside">
+									<ul id="loggedInView-list">
+										<li onclick="visitProfile();">Profile</li>
+										<hr/>
+										<li onclick="alert('Fuck You')">Settings</li>
+										<hr/>
+										<li onclick="logOut();">Log out</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						<!-- loggedInView end -->
+					</div>
+				</div>
+			</div>
+		</core-toolbar>
+
+		<core-animated-pages transitions="slide-from-right" fit>
+			<!-- Menu code start -->
+			<section id="menu-page" style="background-color: #CDCDCD;" class="core-selected" active>
+				<canvas id='menu-canvas' onmousemove="mouseHover(event)" onmouseup="mouseClick(event)" style="margin: 0 auto; display: block;"></canvas>
+			</section>
+			<!-- Menu code end -->
+			<!-- Overview code start -->
+			<section id="overview-page" style="background-color: red;">
+				<div id='overview-container' layout vertical center center-justified>
+					<div id='overview' class="block" style="display: block;">
+						<!-- <div style='text-align: center;'><div class='playOnlineHeader'>Play online</div></div> -->
+
+						<div>
+							<div style='display: table; table-layout: fixed; width: 100%;'>
+								<div class='buttonNormal' id='currentGamesViewButton' onclick='lookAtCurrentGames();'>Active matches<span id='totalActiveMatches'></span></div>
+								<div class='buttonSelected' id='createGameViewButton' onclick='startCreatingGame();'>Start new match</div>
+							</div>
+
+							<div style='background-color: grey; position: relative; padding: 5px; border: 1px solid black; text-align: center;'>
+								<div id='currentGamesContainer' style='display: block;'>
+									<paper-button raised style="background-color: #444;" onclick='reloadGames();'>Refresh</paper-button><br>
+									<div id='currentmatches'>Loading current matches...</div>
+								</div>
+
+								<div id='createGameContainer' style='display: none;'>Loading...</div>
+							</div>
+						</div>
+					</div>
+					<div id='creategame' class="block" style="display: none;">
+						<!-- <div style='text-align: center;'><div class='playOnlineHeader'>Play online</div></div> -->
+
+						<div>
+							<div style='position: relative; padding: 5px; border: 1px solid black; text-align: center;'	
+								<div id='createGameContainer' style='display: none;'>Loading...</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- Overview code end -->
+			<!-- About code start -->
+			<section id="about-page" style="background-color: purple;">
+				<div id='about-container' layout vertical center center-justified>
+					<div style='padding: 20px; background-color: white;'>
+						<div style='text-align: center;'>
+							<!-- <input type='button' value='Back' onclick="switchscreens(screenactive,'menu');"> -->
+							<br>
+							<h1>About this game</h1>
+							<p>This is a game where you, the player, interact with people all over the world to master the art of TRHOWING EVERYTHING YOU CAN IN DA TRASH BIN #YOLO</p>
+						</div>
+						<br>
+						<br>
+						<div style='text-align: center; display: block;'>
+						<table border='1' cellpadding='5' style='display: inline-block;'>
+						<tr><th>Game name</th><td>Trash Battle</td></tr>
+						<tr><th>Developers</th><td>Mitchell Olsthoorn<br>Rob van den Berg</td></tr>
+						<tr><th>Start of development</th><td>August 11th, 2014</td></tr>
+						<tr><th>Goal release date</th><td>September 26th, 2017</td></tr>
+						<tr><th>Current version</th><td><s>v0.1.2.potato.4</s><br><s>v0.4.streetlamp.2.1</s><br><s>v0.6.8.tower.8.123483.83229</s><br><s>v0.69.yesisaidit.23874.35922</s><br><s>v0.7.finallyFixedSound!.ahyiss</s><br>v0.75.theyseemescrolling.2.3</td></tr>
+						</table>
+						</div>	
+					</div>
+				</div>
+			</section>
+			<!-- About code end -->
+			<!-- Shop code start -->
+			<section id="shop-page" style="background-color: purple;">
+				<div id='shop-container' layout vertical center center-justified>
+					<div id='shop' class="block" style="display: block;">
+						<div>
+							<div style='position: relative; padding: 5px; border: 1px solid black; text-align: center;'>
+								<div id='currentGamesContainer' style='display: block;'>
+									<div id='currentmatches'>
+										<div>Ticket to heaven <a href="//heaven.com"><input type="button" value="Buy"></a></div>
+										<div>Ticket to hell <a href="//hell.com"><input type="button" value="Buy"></a></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- Shop code end -->
+		</core-animated-pages>
+		
+		<script>			
+			function changePage(page) {
+				var p = document.querySelector('core-animated-pages');
+				p.selected = page;
+			}
+		</script>
+		
+	</core-header-panel>
+	
+	<!-- Menu code start -->
+	<!--
+	<div id='menu-container' style='display: none;'>
+		<div id="menu">
+			<canvas id='menu-canvas' style='display: block;' onmousemove="mouseHover(event)" onmouseup="mouseClick(event)"></canvas>
+		</div>
+	</div>
+	<!-- Menu code end -->
+
+
+	<!-- Game overview screen start -->
+	
+	<!-- Game overview screen end -->
+
+	<!-- About screen start -->
+	
+	<!-- About screen end -->
+	
+	<!-- Shop screen start -->
+	
+	<!-- Shop screen end -->
+</body>
+</html>
