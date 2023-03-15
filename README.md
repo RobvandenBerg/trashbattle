@@ -1,7 +1,7 @@
 # Trash Battle
 
 An online multiplayer game that was in development many years ago, but never got to the point of release. Try the game on http://trashbattle.com.
-Released now as open-source.
+Full code published now.
 
 **Requirements:**
 PHP
