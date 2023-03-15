@@ -1,2 +1,2 @@
-database_info.json
-server/node_modules
+/database_info.json
+/server/node_modules/

@@ -1,0 +1,395 @@
+game.js is listening on *:10000
+This game is now running on port 10000! :)
+This game has been running for 0.01 seconds and there are 0 people active
+The game host is 0
+The host is not here! Next possible host would be: null
+Connected to trashbattle on localhost
+Executed query: SELECT games.id,users.username,games.guests,games.max_players,games.chat from trashbattle.games, trashbattle.users where port=10000 and users.id=games.host order by ID DESC LIMIT 0,1
+{ id: 543,
+  username: 'Robdeprop',
+  guests: 1,
+  max_players: 4,
+  chat: 1 }
+Host is Robdeprop
+MySQL id of this game: 543
+New game connection from 50.62.166.105:10000
+New chat connection from 50.62.166.105:10000
+Ip:83.128.214.59
+Connected to trashbattle on localhost
+Executed query: SELECT count(*) as total from trashbattle.sessions, trashbattle.games where sessions.username="Robdeprop" and games.id=sessions.game
+Connected to trashbattle on localhost
+Executed query: SELECT COUNT( * ) AS total, time FROM trashbattle.bans WHERE  username="Robdeprop" OR ip="83.128.214.59"
+Robdeprop's god status: 1
+Session npqa6dqrmmu8e0sdjr2ats8l16 username: Robdeprop
+Some user connected with username Robdeprop, userid 1
+Host is Robdeprop
+Connected to trashbattle on localhost
+Executed query: Insert into trashbattle.sessions (username,game) VALUES ("Robdeprop",543)
+Got a join request
+Connected to trashbattle on localhost
+Executed query: UPDATE trashbattle.games set players=1 where id=543
+UPDATED THE AMOUNT OF USERS IN THE DATABASE
+New game connection from 50.62.166.105:10000
+New chat connection from 50.62.166.105:10000
+Ip:83.128.214.59
+Connected to trashbattle on localhost
+Executed query: SELECT count(*) as total from trashbattle.sessions, trashbattle.games where sessions.username="Guest 39883" and games.id=sessions.game
+Connected to trashbattle on localhost
+Executed query: SELECT COUNT( * ) AS total, time FROM trashbattle.bans WHERE  username="Guest 39883" OR ip="83.128.214.59"
+Guest 39883's god status: NaN
+Session ph2cb5ihr5gqqm6ghq1o2dhdq4 username: Guest 39883
+Some user connected with username Guest 39883, userid undefined
+Host is Robdeprop
+Connected to trashbattle on localhost
+Executed query: Insert into trashbattle.sessions (username,game) VALUES ("Guest 39883",543)
+Got a join request
+Connected to trashbattle on localhost
+Executed query: UPDATE trashbattle.games set players=2 where id=543
+UPDATED THE AMOUNT OF USERS IN THE DATABASE
+Robdeprop tries to start the game
+This game has been running for 10.01 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+update player color to red
+update player color to blue
+Got a hover character request
+Got a select character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a select character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+This game has been running for 20.01 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Prepared Robdeprop with player number 1
+Prepared Guest 39883 with player number 2
+Floor hit at point 1234
+Player Guest 39883 got hit. 2 lives remaining
+Invincibility Guest 39883: 75 remaining
+Floor hit at point 1034
+Floor hit at point 344
+Floor hit at point 1794
+I ENTERED
+This game has been running for 30.01 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+sprite is now hit_right because direction is jump
+sprite is now CLOSED
+sprite is now hit_left because direction is jump
+sprite is now CLOSED
+sprite is now hit_right because direction is jump
+sprite is now CLOSED
+sprite is now hit_right because direction is jump
+sprite is now CLOSED
+I ENTERED
+sprite is now hit_right because direction is right
+sprite is now CLOSED
+sprite is now hit_right because direction is right
+sprite is now CLOSED
+sprite is now hit_right because direction is right
+sprite is now CLOSED
+sprite is now hit_right because direction is jump
+sprite is now CLOSED
+Floor hit at point 1803
+This game has been running for 40.012 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Player Guest 39883 got hit. 1 lives remaining
+Invincibility Guest 39883: 75 remaining
+Floor hit at point 1590
+This game has been running for 50.012 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1214
+This game has been running for 60.012 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Player Guest 39883 got hit. 0 lives remaining
+Invincibility Guest 39883: 75 remaining
+Floor hit at point 1547
+I ENTERED
+sprite is now hit_left because direction is jump
+sprite is now CLOSED
+sprite is now hit_left because direction is jump
+sprite is now CLOSED
+sprite is now hit_left because direction is jump
+This game has been running for 70.013 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 80.013 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 90.015 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 100.015 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 110.015 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+sending state
+user chat connection from 50.62.166.105:10000 disconnected
+Connected to trashbattle on localhost
+Connected to trashbattle on localhost
+Executed query: UPDATE trashbattle.games set players=1 where id=543
+UPDATED THE AMOUNT OF USERS IN THE DATABASE
+Executed query: Delete from trashbattle.sessions where username="Guest 39883"
+This game has been running for 120.015 seconds and there are 1 people active
+The game host is Robdeprop
+The host is ACTIVE
+New game connection from 50.62.166.105:10000
+New chat connection from 50.62.166.105:10000
+Ip:83.83.47.226
+Connected to trashbattle on localhost
+Executed query: SELECT count(*) as total from trashbattle.sessions, trashbattle.games where sessions.username="Mitchell" and games.id=sessions.game
+Connected to trashbattle on localhost
+Executed query: SELECT COUNT( * ) AS total, time FROM trashbattle.bans WHERE  username="Mitchell" OR ip="83.83.47.226"
+Mitchell's god status: 1
+Session p6cl3bp8v4iqgal91c00kru461 username: Mitchell
+Some user connected with username Mitchell, userid 2
+Host is Robdeprop
+Connected to trashbattle on localhost
+Executed query: Insert into trashbattle.sessions (username,game) VALUES ("Mitchell",543)
+This game has been running for 130.015 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Got a join request
+Connected to trashbattle on localhost
+Executed query: UPDATE trashbattle.games set players=2 where id=543
+UPDATED THE AMOUNT OF USERS IN THE DATABASE
+Robdeprop tries to start the game
+Mitchell tries to start the game
+This game has been running for 140.017 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+update player color to red
+update player color to blue
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a hover character request
+Got a select character request
+Got a select character request
+Prepared Robdeprop with player number 1
+Prepared Mitchell with player number 2
+Floor hit at point 1179
+Floor hit at point 414
+Player Mitchell got hit. 2 lives remaining
+Invincibility Mitchell: 75 remaining
+This game has been running for 150.017 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1544
+I ENTERED
+sprite is now hit_right because direction is right
+sprite is now CLOSED
+sprite is now hit_left because direction is left
+sprite is now CLOSED
+sprite is now hit_left because direction is left
+sprite is now CLOSED
+sprite is now hit_left because direction is left
+sprite is now CLOSED
+sprite is now hit_right because direction is right
+sprite is now CLOSED
+This game has been running for 160.017 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 411
+Floor hit at point 941
+Player Mitchell got hit. 1 lives remaining
+Invincibility Mitchell: 75 remaining
+This game has been running for 170.017 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 831
+I ENTERED
+sprite is now hit_left because direction is left
+sprite is now CLOSED
+sprite is now hit_left because direction is left
+sprite is now CLOSED
+sprite is now hit_left because direction is left
+sprite is now CLOSED
+sprite is now hit_right because direction is right
+sprite is now CLOSED
+sprite is now hit_left because direction is left
+sprite is now CLOSED
+Floor hit at point 1673
+This game has been running for 180.017 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 2123
+Floor hit at point 1543
+Floor hit at point 1938
+This game has been running for 190.019 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1648
+This game has been running for 200.019 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1570
+Floor hit at point 1615
+Floor hit at point 2325
+This game has been running for 210.02 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 220.021 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1908
+ENEMY ENTERED
+This game has been running for 230.021 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 2418
+Floor hit at point 1588
+ENEMY ENTERED
+This game has been running for 240.022 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 2283
+Floor hit at point 1588
+This game has been running for 250.022 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 260.022 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1174
+Floor hit at point 1079
+Floor hit at point 1019
+Floor hit at point 804
+This game has been running for 270.023 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 919
+Floor hit at point 2490
+Floor hit at point 1198
+This game has been running for 280.024 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1239
+I ENTERED
+Floor hit at point 924
+This game has been running for 290.026 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1404
+Floor hit at point 1404
+Floor hit at point 1404
+Floor hit at point 1404
+Floor hit at point 1404
+Floor hit at point 1404
+Floor hit at point 1404
+This game has been running for 300.026 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1404
+Floor hit at point 2184
+Player Robdeprop got hit. 2 lives remaining
+Invincibility Robdeprop: 75 remaining
+This game has been running for 310.026 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Player Robdeprop got hit. 1 lives remaining
+Invincibility Robdeprop: 75 remaining
+This game has been running for 320.027 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 330.028 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 340.03 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1437
+This game has been running for 350.03 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+Floor hit at point 1444
+Floor hit at point 1299
+Floor hit at point 339
+Player Robdeprop got hit. 0 lives remaining
+Invincibility Robdeprop: 75 remaining
+This game has been running for 360.031 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 370.031 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 380.032 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 390.033 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 400.033 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 410.033 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 420.033 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 430.033 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 440.034 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 450.034 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 460.035 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 470.035 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 480.035 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 490.037 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 500.037 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
+This game has been running for 510.037 seconds and there are 2 people active
+The game host is Robdeprop
+The host is ACTIVE
